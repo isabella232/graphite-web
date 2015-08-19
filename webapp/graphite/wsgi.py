@@ -1,5 +1,8 @@
 import os
 import sys
+sys.path.append("/opt/graphite/")
+sys.path.append("/opt/graphite/lib")
+sys.path.append("/opt/graphite/webapp")
 
 try:
     from importlib import import_module

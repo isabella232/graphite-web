@@ -125,11 +125,14 @@ class CeresReader(object):
     values = list(data.values)
 
     # Merge in data from carbon's cache
-    try:
-      cached_datapoints = CarbonLink.query(self.real_metric_path)
-    except:
-      log.exception("Failed CarbonLink query '%s'" % self.real_metric_path)
-      cached_datapoints = []
+    if settings.REPLICATION_FACTOR != 0:
+        try:
+          cached_datapoints = CarbonLink.query(self.real_metric_path)
+        except:
+          log.exception("Failed CarbonLink query '%s'" % self.real_metric_path)
+          cached_datapoints = []
+    else:
+        cached_datapoints = []
 
     for (timestamp, value) in cached_datapoints:
       interval = timestamp - (timestamp % data.timeStep)
@@ -165,11 +168,14 @@ class WhisperReader(object):
     (start,end,step) = time_info
 
     # Merge in data from carbon's cache
-    try:
-      cached_datapoints = CarbonLink.query(self.real_metric_path)
-    except:
-      log.exception("Failed CarbonLink query '%s'" % self.real_metric_path)
-      cached_datapoints = []
+    if settings.REPLICATION_FACTOR != 0:
+        try:
+          cached_datapoints = CarbonLink.query(self.real_metric_path)
+        except:
+          log.exception("Failed CarbonLink query '%s'" % self.real_metric_path)
+          cached_datapoints = []
+    else:
+        cached_datapoints = []
 
     if isinstance(cached_datapoints, dict):
       cached_datapoints = cached_datapoints.items()
